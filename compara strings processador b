@@ -1,1 +1,17 @@
-
+Processador Apto = 
+VAR cpu = 'traumazero (6)'[CPU]
+VAR AllModels =
+    DISTINCT(
+        UNION(
+            SELECTCOLUMNS('Table 1', "m", 'Table 1'[Modelar]),
+            SELECTCOLUMNS('Table 1 (2)', "m", 'Table 1 (2)'[Modelar])
+        )
+    )
+VAR matching =
+    FILTER(
+        AllModels,
+        NOT( ISBLANK([m]) ) &&
+        CONTAINSSTRING(cpu, [m])
+    )
+RETURN
+IF( COUNTROWS(matching) > 0, "APTO", "não apto" )
